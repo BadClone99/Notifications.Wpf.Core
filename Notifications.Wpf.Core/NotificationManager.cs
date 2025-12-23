@@ -19,11 +19,13 @@ namespace Notifications.Wpf.Core
 
         private readonly Dispatcher _dispatcher;
         private readonly NotificationPosition _mainNotificationPosition;
+        private readonly Window? _notificationWindowOwner;
 
         /// <summary>
         /// Creates an instance of the <see cref="NotificationManager"/>
         /// </summary>
-        public NotificationManager() : this(NotificationPosition.BottomRight, null)
+        public NotificationManager()
+            : this(NotificationPosition.BottomRight, null, Application.Current?.MainWindow)
         {
         }
 
@@ -32,7 +34,8 @@ namespace Notifications.Wpf.Core
         /// </summary>
         /// <param name="mainNotificationPosition">The position where notifications with no custom area should
         /// be displayed</param>
-        public NotificationManager(NotificationPosition mainNotificationPosition) : this(mainNotificationPosition, null)
+        public NotificationManager(NotificationPosition mainNotificationPosition)
+            : this(mainNotificationPosition, null, Application.Current?.MainWindow)
         {
         }
 
@@ -40,7 +43,8 @@ namespace Notifications.Wpf.Core
         /// Creates an instance of the <see cref="NotificationManager"/>
         /// </summary>
         /// <param name="dispatcher">The <see cref="Dispatcher"/> that should be used</param>
-        public NotificationManager(Dispatcher? dispatcher) : this(NotificationPosition.BottomRight, dispatcher)
+        public NotificationManager(Dispatcher? dispatcher)
+            : this(NotificationPosition.BottomRight, dispatcher, Application.Current?.MainWindow)
         {
         }
 
@@ -50,10 +54,12 @@ namespace Notifications.Wpf.Core
         /// <param name="mainNotificationPosition">The position where notifications with no custom area should
         /// be displayed</param>
         /// <param name="dispatcher">The <see cref="Dispatcher"/> that should be used</param>
+        /// <param name="notificationWindowOwner">The owner of the notification window.</param>
         public NotificationManager(NotificationPosition mainNotificationPosition,
-            Dispatcher? dispatcher)
+            Dispatcher? dispatcher, Window? notificationWindowOwner)
         {
             _mainNotificationPosition = mainNotificationPosition;
+            _notificationWindowOwner = notificationWindowOwner;
 
             if (dispatcher == null)
             {
@@ -157,9 +163,13 @@ namespace Notifications.Wpf.Core
                         Left = workArea.Left,
                         Top = workArea.Top,
                         Width = workArea.Width,
-                        Height = workArea.Height,
-                        Owner = Application.Current.MainWindow
+                        Height = workArea.Height
                     };
+
+                    if (_notificationWindowOwner != null)
+                    {
+                        _window.Owner = _notificationWindowOwner;
+                    }
 
                     _window.SetNotificationAreaPosition(_mainNotificationPosition);
                     _window.Show();
