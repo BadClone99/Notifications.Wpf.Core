@@ -54,6 +54,17 @@ namespace Notifications.Wpf.Core
         /// <param name="mainNotificationPosition">The position where notifications with no custom area should
         /// be displayed</param>
         /// <param name="dispatcher">The <see cref="Dispatcher"/> that should be used</param>
+        public NotificationManager(NotificationPosition mainNotificationPosition, Dispatcher? dispatcher)
+            : this(mainNotificationPosition, dispatcher, Application.Current?.MainWindow)
+        {
+        }
+
+        /// <summary>
+        /// Creates an instance of the <see cref="NotificationManager"/>
+        /// </summary>
+        /// <param name="mainNotificationPosition">The position where notifications with no custom area should
+        /// be displayed</param>
+        /// <param name="dispatcher">The <see cref="Dispatcher"/> that should be used</param>
         /// <param name="notificationWindowOwner">The owner of the notification window.</param>
         public NotificationManager(NotificationPosition mainNotificationPosition,
             Dispatcher? dispatcher, Window? notificationWindowOwner)
